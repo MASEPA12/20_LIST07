@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class THREE : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public int value;
+    public TextMeshProUGUI valueText;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        valueText.text = $"VALUE: {value}";
+    }
+    void Update()
+    {   //when the down arrow is cliked, value - 1
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            value--;
+            valueText.text = $"VALUE: {value}";
+        }
     }
 }

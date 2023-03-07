@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TWO : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private int time = 0;
+    public TextMeshProUGUI timeText;
     void Start()
     {
-        
+        StartCoroutine(counter2());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private IEnumerator counter2()
+    {   //it displays the seconds 
+        while (true)
+        {
+            timeText.text = ($"TIME: {time}");
+            time++;
+            yield return new WaitForSeconds(1);
+        }
     }
+
 }
