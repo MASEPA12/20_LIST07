@@ -5,8 +5,6 @@ using TMPro;
 
 public class FIVE : MonoBehaviour
 {
-    private int numberOfTimes = 50; //no se quantes vegades li he de posar, sinos se me petarà
-    
     //color
     private Renderer _color;
 
@@ -14,8 +12,10 @@ public class FIVE : MonoBehaviour
     private int points = 0;
     public TextMeshProUGUI pointsText;
     public TextMeshProUGUI livesText;
+    public GameObject gameOverPanel;
     private int lives = 3;
- 
+    
+    //checkers
     private bool canClik = true;
     private bool hasCliked = true;
 
@@ -23,49 +23,45 @@ public class FIVE : MonoBehaviour
     public AudioClip _sound;
     private AudioSource _audioSource;
 
- 
 
     void Start()
     {
         _audioSource = GetComponent<AudioSource>();
         _color = gameObject.GetComponent<Renderer>();
         StartCoroutine("positionChange");
+
+        //we desactivte the gameOverPanel unitil game over is true
+        gameOverPanel.SetActive(false);
     }
    
     private IEnumerator positionChange()
-    {   //i is equal to variable editable from the inspector, meanwhile i= numberOfTimes, i will decrease a number
-
-        //hasCliked = true; //evitar es bug q mos lleva una vida a lo principi
-
+    {   
+        //we check if the plyayer has already cliked the ball (in order to avoid multiple points)
         if (canClik == true)
         {
-            for (int i = numberOfTimes; i > 0; i--)
+            //meanwhile is not game over
+            while (lives>0)
             {
-                //hasCliked = true;
                 canClik = true;
-                //mos aseguram que es color és blau a nes principi
+
+                //restart the blue color
                 _color.material.color = Color.blue;
 
                 //random pos
                 Vector3 randomPos = new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5));
                 transform.position = randomPos;
 
-                Debug.Log($"hasclicked:{hasCliked}, canClik:{canClik}");
-
-                //si on mouse dwn no es executat...
+                //if OnMouseDown is not executed...
                 if (hasCliked == false)
                 {
-                    Debug.Log("HASOTIJATBE");
                     lives--;
                     livesCounter();
                     GameOver();
-                    //fer que surti Game over en gran--> aquella pared blanca
                 }
 
-                //si en tot aquest temps no ha pitjat, sa variable per si sola ja se posa false
+                //if the player hasn't clicked in all this time...
                 hasCliked = false;
 
-                //esperandu
                 yield return new WaitForSeconds(2);
 
             }
@@ -74,7 +70,7 @@ public class FIVE : MonoBehaviour
 
     private void OnMouseDown()
     {
-        //si pitj un pic i no havi pitjat abans, canvia color, suma 1 punt, update text i ja no puc pitjar més
+        //if the player cliks (and it didn't clik befor) change color, +1 point, update score text and play a soud
         if (canClik==true && gameObject.CompareTag("ball"))
         {
             _color.material.color = Color.green;
@@ -85,19 +81,19 @@ public class FIVE : MonoBehaviour
             _audioSource.PlayOneShot(_sound);
 
             hasCliked = true;
+
+            //finally, the player can't clik anymore until the loop is reloaded
             canClik = false;
-
-            Debug.Log($"hasclicked:{hasCliked}, canClik:{canClik}");    
-
         }
     }
 
     private void GameOver()
     {
+        //when the lives are over, game over
         if(lives <= 0)
         {
             Time.timeScale = 0;
-            Debug.Log("GAME OVER");
+            gameOverPanel.SetActive(true);
         }
     }
 
@@ -121,14 +117,4 @@ public class FIVE : MonoBehaviour
         }
     }
 
-    //si se pitja a algun lloc de sa pantalla en algun moment se posa true
-    /*private bool clikedOut()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("DDDDDDDD");
-            return true;
-        }
-        return false;
-    }*/
 }
