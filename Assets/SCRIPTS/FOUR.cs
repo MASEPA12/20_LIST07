@@ -16,11 +16,9 @@ public class FOUR : MonoBehaviour
         for (int i=numberOfTimes; i>0 ;i--)
         {
             //we create a random position every time
-            Vector3 randomPos = new Vector3(Random.Range(-5, 20), Random.Range(-5, 20), Random.Range(-5, 20));
+            Vector3 randomPos = new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5));
             //change the position of the GO for the random position
             transform.position = randomPos;
-            //print the position of the console
-            Debug.Log($"{randomPos}");
             //wait 2 second after repeat the loop
             yield return new WaitForSeconds(2);
         }
